@@ -22,12 +22,12 @@ class LinkedList<T> {
         if (!this.head) {
             this.head = newNode;
             this.tail = this.head;
-            this.length = 1;
-            return;
+        } else {
+            this.tail!.next = newNode;
+            this.tail = newNode;
         }
-        this.tail!.next = newNode;
-        this.tail = newNode;
         this.length++;
+        return this;
     }
 
     pop() {
@@ -133,20 +133,53 @@ class LinkedList<T> {
         this.length = 0;
     }
 
+    reverse() {
+        // prev = null
+        // curr = head
+        // next = head.next
+        // curr.next = prev
+        // prev = curr
+        // curr = next
+        // next = curr.next
+        // curr.nex = prev
+        const head = this.head;
+        const tail = this.tail;
 
+        let prev: ListNode<T> | null = null;
+        let curr = this.head;
+        let next: ListNode<T> | null;
+
+        this.head = tail;
+        this.tail = head;
+        
+        while (curr) {
+            next = curr!.next;
+            curr!.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return this;
+    }
+
+    print() {
+        const hold: T[] = [];
+        let current = this.head;
+        while(current) {
+            hold.push(current.value);
+            current = current.next;
+        }
+        console.log(hold.join("-> "))
+    }
 }
 
-const li = new LinkedList(5);
-li.pop();
-li.push(42)
-li.push(41)
-li.push(43)
-li.unshift(3).unshift(2).shift().pop()
-// console.dir(li, { depth: null })
-li.insert(3,12)
-li.insert(3,13)
 
-console.dir(li, { depth: null })
-li.clear()
-console.dir(li, { depth: null })
+// REVERSE A LINKED LIST
+const list = new LinkedList(1);
+list.push(2).push(3).push(4).push(5).reverse()
+list.print()
+list.reverse().pop()
+list.print();
+
+
 
